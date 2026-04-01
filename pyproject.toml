@@ -1,0 +1,55 @@
+[build-system]
+requires      = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name        = "antibodyforge-jax"
+version     = "0.1.0"
+description = "De novo CDR-H3 inverse-folding engine — JAX/Flax/Optax/Pallas rewrite"
+readme      = "README.md"
+license     = { text = "Apache-2.0" }
+requires-python = ">=3.10"
+
+dependencies = [
+    # JAX ecosystem (replaces torch + triton)
+    "jax[cuda12]>=0.4.24",          # Pallas available from 0.4.24
+    "flax>=0.8.0",                  # replaces torch.nn
+    "optax>=0.2.0",                 # replaces torch.optim + schedulers
+    "orbax-checkpoint>=0.5.0",      # replaces torch.save/load
+    # Unchanged dependencies
+    "numpy>=1.26.0",
+    "pyyaml>=6.0",
+    "cffi>=1.16.0",
+]
+
+[project.optional-dependencies]
+cpu = [
+    "jax>=0.4.24",                  # CPU-only JAX (no CUDA suffix)
+    "flax>=0.8.0",
+    "optax>=0.2.0",
+    "orbax-checkpoint>=0.5.0",
+    "numpy>=1.26.0",
+    "pyyaml>=6.0",
+    "cffi>=1.16.0",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
+train = [
+    "tqdm>=4.66",
+    "tensorboard>=2.16",
+    "biopython>=1.83",
+]
+
+[project.scripts]
+antibodyforge-jax-design = "src.scripts.design:main"
+antibodyforge-jax-train  = "src.scripts.train:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts   = "-v --tb=short"
+
+[tool.setuptools.packages.find]
+where   = ["."]
+include = ["src*"]
