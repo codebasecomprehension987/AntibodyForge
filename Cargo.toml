@@ -1,0 +1,19 @@
+[package]
+name    = "beam_slab"
+version = "0.1.0"
+edition = "2021"
+description = "Rust slab allocator for AntibodyForge beam search states (framework-agnostic)"
+license = "Apache-2.0"
+
+[lib]
+name       = "beam_slab"
+crate-type = ["cdylib"]
+
+[profile.release]
+opt-level     = 3
+lto           = true
+codegen-units = 1
+panic         = "abort"
+
+[dependencies]
+# No external dependencies — stdlib only
